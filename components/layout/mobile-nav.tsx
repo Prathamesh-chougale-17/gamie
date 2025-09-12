@@ -3,11 +3,11 @@
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { ConnectWalletButton } from "@/components/rainbow-wallet/connect-wallet-button";
-import { NetworkSwitcher } from "@/components/rainbow-wallet/network-switcher";
 import { Button } from "@/components/ui/button";
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { AvaxChainDropdown } from "../avax-wallet/chain-dropdown";
+import { AvaxConnectButton } from "../avax-wallet/connect-button";
 
 type NavItem = {
   title: string;
@@ -58,8 +58,8 @@ export function MobileNav({ navItems }: MobileNavProps) {
                 Wallet
               </div>
               <div className="space-y-3">
-                <NetworkSwitcher />
-                <ConnectWalletButton className="w-full" variant="outline" />
+                <AvaxChainDropdown />
+                <AvaxConnectButton />
               </div>
             </div>
           </div>

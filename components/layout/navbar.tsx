@@ -1,8 +1,7 @@
 import Link from "next/link";
+import { AvaxChainDropdown } from "@/components/avax-wallet/chain-dropdown";
 import { MobileNav } from "@/components/layout/mobile-nav";
-import { ConnectWalletButton } from "@/components/rainbow-wallet/connect-wallet-button";
-import { NetworkSwitcher } from "@/components/rainbow-wallet/network-switcher";
-
+import { AvaxConnectButton } from "../avax-wallet/connect-button";
 // Navigation items
 
 export function Navbar({
@@ -37,8 +36,8 @@ export function Navbar({
         <div className="flex items-center justify-end gap-2">
           {/* Desktop wallet controls */}
           <div className="hidden items-center gap-2 md:flex">
-            <NetworkSwitcher />
-            <ConnectWalletButton size="sm" variant="outline" />
+            <AvaxChainDropdown />
+            <AvaxConnectButton />
           </div>
 
           {/* Mobile navigation */}
