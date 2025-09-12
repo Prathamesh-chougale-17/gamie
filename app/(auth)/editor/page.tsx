@@ -4,6 +4,7 @@ import { Code, Plus, ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
+import { useAccount } from "wagmi";
 import EditorGameCardSkeleton from "@/components/skeletons/editor-skeleton";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,10 +28,12 @@ export default function EditorDashboard() {
   >(null);
   const [deleting, setDeleting] = React.useState(false);
 
+  const { address } = useAccount();
+
   const loadGames = React.useCallback(async () => {
     try {
-      const walletAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS;
-      const response = await fetch(`/api/games?wallet=${walletAddress}`);
+      setLoading(true);
+      const response = await fetch(`/api/games?wallet=${address}`);
       const result = await response.json();
 
       if (result.success) {
@@ -43,7 +46,7 @@ export default function EditorDashboard() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [address]);
 
   React.useEffect(() => {
     loadGames();
@@ -59,18 +62,14 @@ export default function EditorDashboard() {
     setSelectedGameToDelete(null);
   };
 
+  const { address: walletAddress } = useAccount();
+
   const performDelete = async (gameId: string | null) => {
     if (!gameId) {
       return;
     }
     setDeleting(true);
     try {
-      const walletAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS;
-      if (!walletAddress) {
-        toast.error("Wallet address not configured");
-        return;
-      }
-
       const res = await fetch("/api/games/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -4,6 +4,7 @@ import { Search, Star, Store } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
+import { useAccount } from "wagmi";
 import MarketplaceGameCardSkeleton from "@/components/skeletons/market-skeleton";
 import { Button } from "@/components/ui/button";
 import { GameCard } from "@/components/ui/game-card";
@@ -18,8 +19,7 @@ export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
 
-  const activeAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS;
-
+  const { address: activeAddress } = useAccount();
   React.useEffect(() => {
     const loadMarketplaceGames = async () => {
       try {

@@ -3,6 +3,7 @@
 import { Code, Download, Share2, Store, Users, Zap } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
+import { useAccount } from "wagmi";
 import { Button } from "@/components/ui/button";
 import type { GenerateGameCodeOutput } from "@/types/ai-sdk";
 import { EnhancedGameGeneratorDialog } from "./EnhancedGameGeneratorDialog";
@@ -28,13 +29,14 @@ export function EnhancedHeader({
 }: EnhancedHeaderProps) {
   const [isPublishing, setIsPublishing] = React.useState(false);
 
+  const { address: walletAddress } = useAccount();
+
   const validatePublishInputs = () => {
     if (!(gameId && title && html)) {
       toast.error("Please save your game first before publishing");
       return null;
     }
 
-    const walletAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS;
     if (!walletAddress) {
       toast.error("Wallet address not configured");
       return null;

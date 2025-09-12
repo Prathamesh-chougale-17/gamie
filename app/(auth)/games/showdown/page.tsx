@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { useAccount } from "wagmi";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,9 +40,7 @@ type ContractState = {
 
 export default function QuickDrawGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const activeAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS || null;
-
+  const { address: activeAddress } = useAccount();
   const [gameState, setGameState] = useState<GameState>("waiting");
   const [winner, setWinner] = useState<Winner>("none");
   const [message, setMessage] = useState("Connect wallet to start staking!");

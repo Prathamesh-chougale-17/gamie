@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
+import { useAccount } from "wagmi";
 import { CodeEditor } from "@/components/canvas-forge/CodeEditor";
 import { Header } from "@/components/canvas-forge/Header";
 import { Preview } from "@/components/canvas-forge/Preview";
@@ -91,31 +92,34 @@ export default function GameEditor() {
   const [isLoading, setIsLoading] = React.useState<boolean>(!isNewGame);
   const [isGameGenerated, setIsGameGenerated] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
+  const { address: walletAddress } = useAccount();
 
-  const loadGame = React.useCallback(async (id: string) => {
-    setIsLoading(true);
-    try {
-      const walletAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS;
-      const response = await fetch(`/api/games?wallet=${walletAddress}`);
-      const result = await response.json();
+  const loadGame = React.useCallback(
+    async (id: string) => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/games?wallet=${walletAddress}`);
+        const result = await response.json();
 
-      if (result.success) {
-        const game = result.games.find((g: Game) => g.gameId === id);
-        if (game && game.versions.length > 0) {
-          const latestVersion = game.versions.at(-1);
-          setHtml(latestVersion.html);
-          setTitle(game.title);
-          setIsGameGenerated(true);
-          setCurrentGameId(game.gameId);
-          setCurrentGame(game); // Store the full game data
+        if (result.success) {
+          const game = result.games.find((g: Game) => g.gameId === id);
+          if (game && game.versions.length > 0) {
+            const latestVersion = game.versions.at(-1);
+            setHtml(latestVersion.html);
+            setTitle(game.title);
+            setIsGameGenerated(true);
+            setCurrentGameId(game.gameId);
+            setCurrentGame(game); // Store the full game data
+          }
         }
+      } catch {
+        toast.error("Failed to load game");
+      } finally {
+        setIsLoading(false);
       }
-    } catch {
-      toast.error("Failed to load game");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [walletAddress]
+  );
 
   React.useEffect(() => {
     if (!isNewGame) {
@@ -156,7 +160,6 @@ export default function GameEditor() {
       return;
     }
 
-    const walletAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS;
     if (!walletAddress) {
       toast.error("Wallet address not configured");
       return;
@@ -210,7 +213,6 @@ export default function GameEditor() {
     }
 
     try {
-      const walletAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS;
       const response = await fetch("/api/games/unpublish", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -235,7 +237,6 @@ export default function GameEditor() {
     }
 
     try {
-      const walletAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS;
       const currentVersion = currentGame?.currentVersion || 1;
 
       const response = await fetch("/api/games/publish", {
@@ -279,8 +280,7 @@ export default function GameEditor() {
   //   }
 
   //   try {
-  //     const walletAddress = process.env.NEXT_PUBLIC_WALLET_ADDRESS;
-  //     const currentVersion = currentGame?.currentVersion || 1;
+  //   //     const currentVersion = currentGame?.currentVersion || 1;
 
   //     const response = await fetch("/api/games/publish", {
   //       method: "POST",

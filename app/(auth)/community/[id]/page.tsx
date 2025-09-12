@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
+import { useAccount } from "wagmi";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,6 +44,7 @@ export default function CommunityGamePage({ params }: CommunityGamePageProps) {
   const [forking, setForking] = React.useState(false);
   const [isFullscreen, setIsFullscreen] = React.useState(false);
   const router = useRouter();
+  const { address } = useAccount();
 
   const loadGame = React.useCallback(async () => {
     try {
@@ -77,7 +79,7 @@ export default function CommunityGamePage({ params }: CommunityGamePageProps) {
         },
         body: JSON.stringify({
           originalGameId: resolvedParams.id,
-          walletAddress: process.env.NEXT_PUBLIC_WALLET_ADDRESS,
+          walletAddress: address,
         }),
       });
 
@@ -113,8 +115,8 @@ export default function CommunityGamePage({ params }: CommunityGamePageProps) {
     });
   };
 
-  const formatWalletAddress = (address: string) => {
-    return `${address.slice(0, WALLET_ADDRESS_PREFIX_LENGTH)}...${address.slice(-WALLET_ADDRESS_SUFFIX_LENGTH)}`;
+  const formatWalletAddress = (walletAddress: string) => {
+    return `${walletAddress.slice(0, WALLET_ADDRESS_PREFIX_LENGTH)}...${walletAddress.slice(-WALLET_ADDRESS_SUFFIX_LENGTH)}`;
   };
 
   const getGameUrl = () => {
