@@ -246,6 +246,42 @@ function ActionsSection({
     );
   }
 
+  // If game is for sale and user can buy, show pricing component prominently
+  if (game.isForSale && game.salePrice && onBuy && currentUserAddress) {
+    return (
+      <>
+        <Link className="flex-1" href={`/marketplace/${game.gameId}`}>
+          <Button
+            className="w-full gap-2 border-emerald-200 text-emerald-700 transition-all duration-200 hover:scale-[1.02] hover:border-emerald-300 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-900/20"
+            size="sm"
+            type="button"
+            variant="outline"
+          >
+            <Play className="h-4 w-4" />
+            Play Game
+          </Button>
+        </Link>
+
+        {/* Compact Pyth Dynamic Pricing */}
+        <div className="flex-1">
+          <PythGamePricing
+            gameId={game.gameId}
+            basePriceUSD={(game.salePrice ?? 1) * 100} // Convert GEM to USD cents
+            contractAddress="0x5FbDB2315678afecb367f032d93F642f64180aa3" // Local deployment address
+            onPurchaseComplete={() => onBuy?.(game.gameId, game.salePrice ?? 0)}
+            compact={true} // Enable compact mode for card integration
+          />
+        </div>
+
+        {onShare && (
+          <QrShare
+            url={`${typeof window !== "undefined" ? window.location.origin : ""}/marketplace/${game.gameId}`}
+          />
+        )}
+      </>
+    );
+  }
+
   return (
     <>
       <Link className="flex-1" href={`/marketplace/${game.gameId}`}>
@@ -259,18 +295,6 @@ function ActionsSection({
           Play Game
         </Button>
       </Link>
-
-      {/* Pyth Dynamic Pricing - Real-time ETH prices */}
-      {game.isForSale && game.salePrice && onBuy && currentUserAddress && (
-        <div className="w-full">
-          <PythGamePricing
-            gameId={game.gameId}
-            basePriceUSD={(game.salePrice ?? 1) * 100} // Convert GEM to USD cents
-            contractAddress="0x5FbDB2315678afecb367f032d93F642f64180aa3" // Local deployment address
-            onPurchaseComplete={() => onBuy?.(game.gameId, game.salePrice ?? 0)}
-          />
-        </div>
-      )}
 
       {onShare && (
         <div className="flex items-center">
@@ -392,7 +416,7 @@ export function GameCard({
 
           {/* Enhanced Actions Section */}
           <div className="border-slate-200/50 border-t bg-gradient-to-r from-slate-50/30 to-transparent dark:border-slate-700/50 dark:from-slate-800/30">
-            <div className="flex gap-3 px-6 py-4">
+            <div className="flex flex-col gap-3 px-6 py-4">
               <ActionsSection
                 currentUserAddress={currentUserAddress}
                 game={game}

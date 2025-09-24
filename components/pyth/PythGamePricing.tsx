@@ -6,7 +6,7 @@ import { parseEther, formatEther } from 'viem';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, TrendingUp, TrendingDown, DollarSign, Zap } from 'lucide-react';
+import { Loader2, TrendingUp, TrendingDown, DollarSign, Zap, CreditCard } from 'lucide-react';
 import { pythPriceService, type PriceData, type GamePriceCalculation } from '@/lib/pyth-price-service';
 import { toast } from 'sonner';
 
@@ -15,6 +15,7 @@ interface PythGamePricingProps {
   basePriceUSD: number; // Price in cents
   contractAddress: `0x${string}`;
   onPurchaseComplete?: () => void;
+  compact?: boolean; // Enable compact layout for card integration
 }
 
 const GAME_ECONOMY_ABI = [
@@ -51,7 +52,8 @@ export function PythGamePricing({
   gameId, 
   basePriceUSD, 
   contractAddress, 
-  onPurchaseComplete 
+  onPurchaseComplete,
+  compact = false
 }: PythGamePricingProps) {
   const [ethPrice, setEthPrice] = useState<PriceData | null>(null);
   const [gamePrice, setGamePrice] = useState<GamePriceCalculation | null>(null);
@@ -254,6 +256,15 @@ export function PythGamePricing({
   const isStale = ethPrice ? pythPriceService.isPriceStale(ethPrice.publishTime) : false;
 
   if (isLoading) {
+    if (compact) {
+      return (
+        <div className="flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/50 p-3 dark:border-emerald-800 dark:bg-emerald-900/20">
+          <Loader2 className="h-4 w-4 animate-spin text-emerald-600" />
+          <span className="text-sm text-emerald-700 dark:text-emerald-300">Loading prices...</span>
+        </div>
+      );
+    }
+    
     return (
       <Card className="w-full">
         <CardContent className="flex items-center justify-center p-8">
@@ -264,6 +275,58 @@ export function PythGamePricing({
     );
   }
 
+  // Compact layout for game cards
+  if (compact) {
+    return (
+      <div className="space-y-3">
+        {/* Compact Price Display */}
+        <div className="rounded-lg border border-emerald-200 bg-gradient-to-r from-emerald-50 to-teal-50 p-3 dark:border-emerald-800 dark:from-emerald-900/20 dark:to-teal-900/20">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-1">
+              <Zap className="h-4 w-4 text-emerald-600" />
+              <span className="font-medium text-emerald-800 text-sm dark:text-emerald-200">Live Pricing</span>
+              {trend === 'up' && <TrendingUp className="h-3 w-3 text-green-500" />}
+              {trend === 'down' && <TrendingDown className="h-3 w-3 text-red-500" />}
+            </div>
+            <Badge variant={isStale ? 'destructive' : 'default'} className="text-xs h-5">
+              {isStale ? 'Stale' : 'Live'}
+            </Badge>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div>
+              <span className="text-gray-600 dark:text-gray-400">ETH Price:</span>
+              <div className="font-bold text-emerald-700 dark:text-emerald-300">
+                ${ethPrice ? pythPriceService.formatPrice(ethPrice.price, 0) : 'N/A'}
+              </div>
+            </div>
+            <div>
+              <span className="text-gray-600 dark:text-gray-400">Game Price:</span>
+              <div className="font-bold text-emerald-700 dark:text-emerald-300">
+                {gamePrice ? gamePrice.priceInEth.toFixed(4) : 'N/A'} ETH
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Compact Action Button */}
+        <Button
+          onClick={handlePurchase}
+          disabled={isPurchasing || isPurchasePending || isPurchaseConfirming || !gamePrice}
+          className="w-full gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white transition-all duration-200 hover:from-emerald-700 hover:to-teal-700"
+          size="sm"
+        >
+          {(isPurchasing || isPurchasePending || isPurchaseConfirming) && (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          )}
+          <CreditCard className="h-4 w-4" />
+          Buy for {gamePrice ? gamePrice.priceInEth.toFixed(4) : '...'} ETH
+        </Button>
+      </div>
+    );
+  }
+
+  // Full layout for standalone use
   return (
     <Card className="w-full">
       <CardHeader>
