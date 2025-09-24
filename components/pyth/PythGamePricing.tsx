@@ -175,7 +175,7 @@ export function PythGamePricing({
         address: contractAddress,
         abi: GAME_ECONOMY_ABI,
         functionName: 'purchaseGame',
-        args: [BigInt(gameId), freshUpdateData],
+        args: [BigInt(gameId), freshUpdateData as `0x${string}`[]],
         value: totalValue,
       });
       
@@ -208,7 +208,7 @@ export function PythGamePricing({
         address: contractAddress,
         abi: GAME_ECONOMY_ABI,
         functionName: 'updateGamePrice',
-        args: [BigInt(gameId), freshUpdateData],
+        args: [BigInt(gameId), freshUpdateData as `0x${string}`[]],
         value: updateFeeBuffer,
       });
       
