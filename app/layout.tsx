@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import AvaxWalletProvider from "@/components/avax-wallet/provider";
+import AvaxWalletProvider from "@/components/wallet/provider";
 import Background from "@/components/background";
 import { Navbar } from "@/components/layout/navbar";
 import { Toaster } from "@/components/ui/sonner";

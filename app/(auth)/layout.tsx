@@ -1,4 +1,4 @@
-import AuthLayout from "@/components/avax-wallet/auth-layout";
+import AuthLayout from "@/components/wallet/auth-layout";
 
 const MainAuthLayout = ({ children }: { children: React.ReactNode }) => {
   return <AuthLayout>{children}</AuthLayout>;

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { AvaxChainDropdown } from "@/components/avax-wallet/chain-dropdown";
+import { AvaxChainDropdown } from "@/components/wallet/chain-dropdown";
 import { MobileNav } from "@/components/layout/mobile-nav";
-import BalanceBadge from "../avax-wallet/balance";
-import { AvaxConnectButton } from "../avax-wallet/connect-button";
+import BalanceBadge from "../wallet/balance";
+import { AvaxConnectButton } from "../wallet/connect-button";
 // Navigation items
 
 export function Navbar({

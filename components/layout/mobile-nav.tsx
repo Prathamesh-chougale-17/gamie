@@ -6,8 +6,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { AvaxChainDropdown } from "../avax-wallet/chain-dropdown";
-import { AvaxConnectButton } from "../avax-wallet/connect-button";
+import { AvaxChainDropdown } from "../wallet/chain-dropdown";
+import { AvaxConnectButton } from "../wallet/connect-button";
 
 type NavItem = {
   title: string;

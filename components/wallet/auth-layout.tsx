@@ -1,7 +1,7 @@
 "use client";
 import { Shield, Wallet, Zap } from "lucide-react";
 import { useAccount } from "wagmi";
-import { AvaxConnectButton } from "@/components/avax-wallet/connect-button";
+import { AvaxConnectButton } from "@/components/wallet/connect-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import {
