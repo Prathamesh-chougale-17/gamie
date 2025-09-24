@@ -43,7 +43,7 @@ const config: HardhatUserConfig = {
       type: "http",
       chainType: "l1",
       url: process.env.SEPOLIA_RPC_URL || "https://sepolia.drpc.org",
-      accounts: process.env.SEPOLIA_PRIVATE_KEY ? [process.env.SEPOLIA_PRIVATE_KEY] : [],
+      accounts: process.env.WALLET_PRIVATE_KEY ? [process.env.WALLET_PRIVATE_KEY] : [],
     },
     mainnet: {
       type: "http",

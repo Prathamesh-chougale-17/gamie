@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { BuyGameDialog } from "@/components/ui/buy-game-dialog";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import QrShare from "@/components/ui/qr-share";
-import { PythGamePricing } from "@/components/pyth/PythGamePricing";
+import { PythPricingDialog } from "@/components/pyth/PythPricingDialog";
 import { POPULAR_FORK_THRESHOLD } from "@/lib/constants";
 import type { Game } from "@/lib/game-service";
 
@@ -246,7 +246,7 @@ function ActionsSection({
     );
   }
 
-  // If game is for sale and user can buy, show pricing component prominently
+  // If game is for sale and user can buy, show buy dialog
   if (game.isForSale && game.salePrice && onBuy && currentUserAddress) {
     return (
       <>
@@ -262,14 +262,14 @@ function ActionsSection({
           </Button>
         </Link>
 
-        {/* Compact Pyth Dynamic Pricing */}
+        {/* Pyth Pricing Dialog */}
         <div className="flex-1">
-          <PythGamePricing
+          <PythPricingDialog
             gameId={game.gameId}
             basePriceUSD={(game.salePrice ?? 1) * 100} // Convert GEM to USD cents
             contractAddress="0x5FbDB2315678afecb367f032d93F642f64180aa3" // Local deployment address
             onPurchaseComplete={() => onBuy?.(game.gameId, game.salePrice ?? 0)}
-            compact={true} // Enable compact mode for card integration
+            gameTitle={game.title}
           />
         </div>
 
@@ -416,7 +416,7 @@ export function GameCard({
 
           {/* Enhanced Actions Section */}
           <div className="border-slate-200/50 border-t bg-gradient-to-r from-slate-50/30 to-transparent dark:border-slate-700/50 dark:from-slate-800/30">
-            <div className="flex flex-col gap-3 px-6 py-4">
+            <div className="flex gap-3 px-6 py-4">
               <ActionsSection
                 currentUserAddress={currentUserAddress}
                 game={game}
