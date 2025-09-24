@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import AvaxWalletProvider from "@/components/wallet/provider";
+import EthereumWalletProvider from "@/components/wallet/provider";
 import Background from "@/components/background";
 import { Navbar } from "@/components/layout/navbar";
 import { Toaster } from "@/components/ui/sonner";
@@ -31,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AvaxWalletProvider>
+        <EthereumWalletProvider>
           <Background>
             <Navbar
               navItems={[
@@ -47,7 +47,7 @@ export default function RootLayout({
             {children}
             <Toaster />
           </Background>
-        </AvaxWalletProvider>
+        </EthereumWalletProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 import { Shield, Wallet, Zap } from "lucide-react";
 import { useAccount } from "wagmi";
-import { AvaxConnectButton } from "@/components/wallet/connect-button";
+import { EthereumConnectButton } from "@/components/wallet/connect-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -45,7 +45,7 @@ const WalletConnectPrompt = () => (
             Connect Your Wallet
           </CardTitle>
           <CardDescription className="mt-2 text-gray-600 dark:text-gray-400">
-            Connect your Avalanche wallet to access the gaming platform
+            Connect your Ethereum wallet to access the gaming platform
           </CardDescription>
         </div>
       </CardHeader>
@@ -71,7 +71,7 @@ const WalletConnectPrompt = () => (
                 Fast
               </div>
               <div className="text-blue-600 dark:text-blue-400">
-                Lightning-fast transactions on Avalanche
+                Lightning-fast transactions on Ethereum
               </div>
             </div>
           </div>
@@ -85,20 +85,20 @@ const WalletConnectPrompt = () => (
                 className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
                 variant="secondary"
               >
-                Avalanche Mainnet
+                Ethereum Mainnet
               </Badge>
               <Badge
                 className="bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300"
                 variant="secondary"
               >
-                Fuji Testnet
+                Ethereum Sepolia
               </Badge>
             </div>
           </AlertDescription>
         </Alert>
 
         <div className="pt-2">
-          <AvaxConnectButton />
+          <EthereumConnectButton />
         </div>
       </CardContent>
     </Card>

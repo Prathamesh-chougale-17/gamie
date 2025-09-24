@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { AvaxChainDropdown } from "@/components/wallet/chain-dropdown";
+import { EthereumChainDropdown } from "@/components/wallet/chain-dropdown";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import BalanceBadge from "../wallet/balance";
-import { AvaxConnectButton } from "../wallet/connect-button";
+import { EthereumConnectButton } from "../wallet/connect-button";
 // Navigation items
 
 export function Navbar({
@@ -37,9 +37,9 @@ export function Navbar({
         <div className="flex items-center justify-end gap-2">
           {/* Desktop wallet controls */}
           <div className="hidden items-center gap-2 md:flex">
-            <AvaxChainDropdown />
+            <EthereumChainDropdown />
             <BalanceBadge />
-            <AvaxConnectButton />
+            <EthereumConnectButton />
           </div>
 
           {/* Mobile navigation */}

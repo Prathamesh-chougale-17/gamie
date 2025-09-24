@@ -1,7 +1,7 @@
 "use client";
 import { ChevronDown } from "lucide-react";
 import { useChainId, useSwitchChain } from "wagmi";
-import { avalanche, avalancheFuji } from "wagmi/chains";
+import { mainnet, sepolia } from "wagmi/chains";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const CHAIN_NAMES = {
-  [avalanche.id]: "Avalanche",
-  [avalancheFuji.id]: "Fuji",
+  [mainnet.id]: "Ethereum",
+  [sepolia.id]: "Sepolia",
 } as const;
 
-export function AvaxChainDropdown() {
+export function EthereumChainDropdown() {
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
 
@@ -35,11 +35,11 @@ export function AvaxChainDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => handleChainSwitch(avalanche.id)}>
-          Avalanche Mainnet
+        <DropdownMenuItem onClick={() => handleChainSwitch(mainnet.id)}>
+          Ethereum Mainnet
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleChainSwitch(avalancheFuji.id)}>
-          Avalanche Fuji
+        <DropdownMenuItem onClick={() => handleChainSwitch(sepolia.id)}>
+          Ethereum Sepolia
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

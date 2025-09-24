@@ -1,19 +1,19 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createConfig, http, WagmiProvider } from "wagmi";
-import { avalanche, avalancheFuji } from "wagmi/chains";
+import { mainnet, sepolia } from "wagmi/chains";
 
 const queryClient = new QueryClient();
 
 const config = createConfig({
-  chains: [avalanche, avalancheFuji],
+  chains: [mainnet, sepolia],
   transports: {
-    [avalanche.id]: http(),
-    [avalancheFuji.id]: http(),
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
   },
 });
 
-const AvaxWalletProvider = ({ children }: { children: React.ReactNode }) => {
+const EthereumWalletProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
@@ -21,4 +21,4 @@ const AvaxWalletProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default AvaxWalletProvider;
+export default EthereumWalletProvider;

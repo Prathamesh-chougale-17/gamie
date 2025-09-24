@@ -6,8 +6,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { AvaxChainDropdown } from "../wallet/chain-dropdown";
-import { AvaxConnectButton } from "../wallet/connect-button";
+import { EthereumChainDropdown } from "../wallet/chain-dropdown";
+import { EthereumConnectButton } from "../wallet/connect-button";
 
 type NavItem = {
   title: string;
@@ -58,8 +58,8 @@ export function MobileNav({ navItems }: MobileNavProps) {
                 Wallet
               </div>
               <div className="space-y-3">
-                <AvaxChainDropdown />
-                <AvaxConnectButton />
+                <EthereumChainDropdown />
+                <EthereumConnectButton />
               </div>
             </div>
           </div>

@@ -16,7 +16,7 @@ const BalanceBadge = () => {
     symbol: string;
   }) => {
     if (!(balanceData?.value && balanceData?.decimals)) {
-      return "0.0000 AVAX";
+      return "0.0000 ETH";
     }
     const value = Number(balanceData.value) / 10 ** balanceData.decimals;
     return `${value.toFixed(DECIMAL_PLACES)} ${balanceData.symbol}`;

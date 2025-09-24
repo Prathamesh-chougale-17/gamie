@@ -17,7 +17,7 @@ const ADDRESS_PREFIX_LENGTH = 6;
 const ADDRESS_SUFFIX_LENGTH = 4;
 const COPY_FEEDBACK_DURATION = 2000;
 
-export function AvaxConnectButton() {
+export function EthereumConnectButton() {
   const { address, isConnected } = useAccount();
   const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
