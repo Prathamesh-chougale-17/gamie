@@ -61,12 +61,32 @@ export function PythGamePricing({
   const [priceHistory, setPriceHistory] = useState<number[]>([]);
   const [priceUpdateData, setPriceUpdateData] = useState<string[]>([]);
 
+  // Convert string gameId to numeric ID for contract
+  const getNumericGameId = (gameId: string): bigint => {
+    // Extract timestamp from gameId (e.g., "game_1757526497571_fcctf08" -> "1757526497571")
+    const match = gameId.match(/game_(\d+)_/);
+    if (match && match[1]) {
+      return BigInt(match[1]);
+    }
+    
+    // Fallback: Create a hash-based numeric ID
+    let hash = 0;
+    for (let i = 0; i < gameId.length; i++) {
+      const char = gameId.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return BigInt(Math.abs(hash));
+  };
+
+  const numericGameId = getNumericGameId(gameId);
+
   // Contract hooks
   const { data: currentContractPrice } = useReadContract({
     address: contractAddress,
     abi: GAME_ECONOMY_ABI,
     functionName: 'getCurrentGamePrice',
-    args: [BigInt(gameId)],
+    args: [numericGameId],
   });
 
   const { 
@@ -175,7 +195,7 @@ export function PythGamePricing({
         address: contractAddress,
         abi: GAME_ECONOMY_ABI,
         functionName: 'purchaseGame',
-        args: [BigInt(gameId), freshUpdateData as `0x${string}`[]],
+        args: [numericGameId, freshUpdateData as `0x${string}`[]],
         value: totalValue,
       });
       
@@ -208,7 +228,7 @@ export function PythGamePricing({
         address: contractAddress,
         abi: GAME_ECONOMY_ABI,
         functionName: 'updateGamePrice',
-        args: [BigInt(gameId), freshUpdateData as `0x${string}`[]],
+        args: [numericGameId, freshUpdateData as `0x${string}`[]],
         value: updateFeeBuffer,
       });
       

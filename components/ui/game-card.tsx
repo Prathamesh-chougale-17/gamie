@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { BuyGameDialog } from "@/components/ui/buy-game-dialog";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import QrShare from "@/components/ui/qr-share";
+import { PythGamePricing } from "@/components/pyth/PythGamePricing";
 import { POPULAR_FORK_THRESHOLD } from "@/lib/constants";
 import type { Game } from "@/lib/game-service";
 
@@ -259,23 +260,16 @@ function ActionsSection({
         </Button>
       </Link>
 
-      {/* Buy Game Button - only show if game is for sale and user is not the owner */}
+      {/* Pyth Dynamic Pricing - Real-time ETH prices */}
       {game.isForSale && game.salePrice && onBuy && currentUserAddress && (
-        // game.walletAddress !== currentUserAddress &&
-        <BuyGameDialog
-          gameTitle={game.title}
-          onBuy={() => onBuy(game.gameId, game.salePrice ?? 0)}
-          price={game.salePrice}
-        >
-          <Button
-            className="gap-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-amber-600 hover:to-orange-700 hover:shadow-xl"
-            size="sm"
-            type="button"
-          >
-            <CreditCard className="h-4 w-4" />
-            Buy {game.salePrice} GEM
-          </Button>
-        </BuyGameDialog>
+        <div className="w-full">
+          <PythGamePricing
+            gameId={game.gameId}
+            basePriceUSD={(game.salePrice ?? 1) * 100} // Convert GEM to USD cents
+            contractAddress="0x5FbDB2315678afecb367f032d93F642f64180aa3" // Local deployment address
+            onPurchaseComplete={() => onBuy?.(game.gameId, game.salePrice ?? 0)}
+          />
+        </div>
       )}
 
       {onShare && (

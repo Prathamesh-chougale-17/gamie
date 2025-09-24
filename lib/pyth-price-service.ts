@@ -1,11 +1,11 @@
-import { EvmPriceServiceConnection } from '@pythnetwork/pyth-evm-js';
+import { HermesClient } from '@pythnetwork/hermes-client';
 
 /**
  * Pyth Network Price Service
  * Handles real-time price feed integration for the gaming platform
  */
 export class PythPriceService {
-  private priceService: EvmPriceServiceConnection;
+  private hermesClient: HermesClient;
   
   // Price feed IDs for various assets
   public readonly PRICE_FEEDS = {
@@ -19,7 +19,7 @@ export class PythPriceService {
   constructor(
     private readonly endpoint: string = 'https://hermes.pyth.network'
   ) {
-    this.priceService = new EvmPriceServiceConnection(endpoint);
+    this.hermesClient = new HermesClient(endpoint);
   }
 
   /**
@@ -29,19 +29,24 @@ export class PythPriceService {
    */
   async getLatestPrice(priceId: string) {
     try {
-      const currentPrices = await this.priceService.getLatestPriceFeeds([priceId]);
+      const priceUpdates = await this.hermesClient.getLatestPriceUpdates([priceId]);
       
-      if (!currentPrices || currentPrices.length === 0) {
+      if (!priceUpdates.parsed || priceUpdates.parsed.length === 0) {
         throw new Error(`No price data found for feed: ${priceId}`);
       }
 
-      const priceData = currentPrices[0];
+      const priceData = priceUpdates.parsed[0];
       
       return {
         id: priceData.id,
-        price: priceData.getPriceNoOlderThan(60), // 60 seconds max age
-        publishTime: priceData.getPriceNoOlderThan(60).publishTime,
-        confidence: priceData.getPriceNoOlderThan(60).conf,
+        price: {
+          price: priceData.price.price,
+          conf: priceData.price.conf,
+          expo: priceData.price.expo,
+          publishTime: priceData.price.publish_time,
+        },
+        publishTime: priceData.price.publish_time,
+        confidence: priceData.price.conf,
       };
     } catch (error) {
       console.error('Error fetching price:', error);
@@ -64,13 +69,22 @@ export class PythPriceService {
    */
   async getMultiplePrices(priceIds: string[]) {
     try {
-      const currentPrices = await this.priceService.getLatestPriceFeeds(priceIds);
+      const priceUpdates = await this.hermesClient.getLatestPriceUpdates(priceIds);
       
-      return currentPrices.map((priceData: any) => ({
+      if (!priceUpdates.parsed) {
+        throw new Error('No parsed price data received');
+      }
+      
+      return priceUpdates.parsed.map((priceData: any) => ({
         id: priceData.id,
-        price: priceData.getPriceNoOlderThan(60),
-        publishTime: priceData.getPriceNoOlderThan(60).publishTime,
-        confidence: priceData.getPriceNoOlderThan(60).conf,
+        price: {
+          price: priceData.price.price,
+          conf: priceData.price.conf,
+          expo: priceData.price.expo,
+          publishTime: priceData.price.publish_time,
+        },
+        publishTime: priceData.price.publish_time,
+        confidence: priceData.price.conf,
       }));
     } catch (error) {
       console.error('Error fetching multiple prices:', error);
@@ -85,8 +99,13 @@ export class PythPriceService {
    */
   async getPriceUpdateData(priceIds: string[]): Promise<string[]> {
     try {
-      const latestVaas = await this.priceService.getLatestVaas(priceIds);
-      return latestVaas;
+      const priceUpdates = await this.hermesClient.getLatestPriceUpdates(priceIds);
+      
+      if (!priceUpdates.binary || !priceUpdates.binary.data) {
+        throw new Error('No binary price update data received');
+      }
+      
+      return priceUpdates.binary.data;
     } catch (error) {
       console.error('Error getting price update data:', error);
       throw error;

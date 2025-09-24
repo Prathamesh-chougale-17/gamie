@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Star, Store } from "lucide-react";
+import { Search, Star, Store, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { GameCard } from "@/components/ui/game-card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { pythPriceService } from "@/lib/pyth-price-service";
 import { PAGE_SIZE } from "@/lib/constants";
 import type { Game } from "@/lib/game-service";
 
@@ -18,8 +20,43 @@ export default function MarketplacePage() {
   const [loading, setLoading] = React.useState(true);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
+  const [ethPrice, setEthPrice] = React.useState<string>("Loading...");
 
   const { address: activeAddress } = useAccount();
+
+  // Real-time ETH price monitoring
+  React.useEffect(() => {
+    let unsubscribe: (() => void) | null = null;
+    
+    const setupPriceMonitoring = async () => {
+      try {
+        // Get initial price
+        const initialPrice = await pythPriceService.getETHPrice();
+        setEthPrice(pythPriceService.formatPrice(initialPrice.price, 2));
+        
+        // Subscribe to real-time updates
+        unsubscribe = await pythPriceService.subscribeToPriceUpdates(
+          [pythPriceService.PRICE_FEEDS.ETH_USD],
+          (prices) => {
+            if (prices.length > 0) {
+              setEthPrice(pythPriceService.formatPrice(prices[0].price, 2));
+            }
+          }
+        );
+      } catch (error) {
+        console.error("Failed to setup price monitoring:", error);
+        setEthPrice("Error");
+      }
+    };
+
+    setupPriceMonitoring();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
   React.useEffect(() => {
     const loadMarketplaceGames = async () => {
       try {
@@ -161,6 +198,10 @@ export default function MarketplacePage() {
                 <Store className="h-4 w-4 text-emerald-500" />
                 <span className="font-medium">Premium Quality</span>
               </div>
+              <Badge className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+                <TrendingUp className="h-3 w-3" />
+                <span className="text-xs font-bold">ETH: ${ethPrice}</span>
+              </Badge>
             </div>
           </div>
           <Link href="/editor">
