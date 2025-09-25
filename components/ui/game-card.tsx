@@ -20,6 +20,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import QrShare from "@/components/ui/qr-share";
 import { PythPricingDialog } from "@/components/pyth/PythPricingDialog";
 import { POPULAR_FORK_THRESHOLD } from "@/lib/constants";
+import { GAME_MARKETPLACE_ADDRESS } from "@/lib/contracts";
 import type { Game } from "@/lib/game-service";
 
 type GameCardProps = {
@@ -267,7 +268,7 @@ function ActionsSection({
           <PythPricingDialog
             gameId={game.gameId}
             basePriceUSD={(game.salePrice ?? 1) * 100} // Convert GEM to USD cents
-            contractAddress="0x5FbDB2315678afecb367f032d93F642f64180aa3" // Local deployment address
+            contractAddress={GAME_MARKETPLACE_ADDRESS}
             onPurchaseComplete={() => onBuy?.(game.gameId, game.salePrice ?? 0)}
             gameTitle={game.title}
           />
