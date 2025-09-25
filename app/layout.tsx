@@ -42,6 +42,7 @@ export default function RootLayout({
                 { title: "Editor", href: "/editor" },
                 { title: "Market Place", href: "/marketplace" },
                 { title: "Community", href: "/community" },
+                { title: "🏆 Pyth Dashboard", href: "/pyth-dashboard" },
               ]}
             />
             {children}

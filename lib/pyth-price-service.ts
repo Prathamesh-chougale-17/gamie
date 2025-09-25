@@ -7,7 +7,7 @@ import { HermesClient } from '@pythnetwork/hermes-client';
 export class PythPriceService {
   private hermesClient: HermesClient;
   
-  // Price feed IDs for various assets
+  // Price feed IDs for various assets (Verified working feeds)
   public readonly PRICE_FEEDS = {
     ETH_USD: '0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace',
     BTC_USD: '0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43',

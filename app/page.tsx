@@ -7,6 +7,7 @@ import {
   ShoppingCart,
   Users,
   Zap,
+  TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -60,6 +61,14 @@ const features = [
       "Fork community games to learn, modify, and create your own improved versions",
     iconColor: "text-pink-500",
     gradientColor: "#ec4899",
+  },
+  {
+    icon: TrendingUp,
+    title: "🏆 Pyth Oracle Integration",
+    description:
+      "Advanced real-time pricing with Pyth Network oracles. Dynamic game marketplace with multi-asset price intelligence.",
+    iconColor: "text-cyan-500",
+    gradientColor: "#06b6d4",
   },
 ];
 
@@ -1445,6 +1454,13 @@ export default function Home() {
                 <Link className="flex items-center gap-2" href="/community">
                   <Users className="size-4" />
                   Join Community
+                </Link>
+              </Button>
+
+              <Button asChild className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
+                <Link className="flex items-center gap-2" href="/pyth-dashboard">
+                  <TrendingUp className="size-4" />
+                  🏆 Pyth Dashboard
                 </Link>
               </Button>
             </div>
