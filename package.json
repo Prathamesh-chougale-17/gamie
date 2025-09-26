@@ -23,6 +23,7 @@
     "@pythnetwork/pyth-evm-js": "2.0.0-alpha2",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-slot": "^1.2.3",
+    "@rainbow-me/rainbowkit": "^2.2.8",
     "@tanstack/react-query": "^5.87.4",
     "ai": "^5.0.33",
     "class-variance-authority": "^0.7.1",
